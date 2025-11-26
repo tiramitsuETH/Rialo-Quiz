@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rialo Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      /* Tema ala Rialo */
+      --cream: #e7dfcf;
+      --cream-soft: #f4eee3;
+      --dark: #050505;
+      --dark-soft: #111111;
+      --mint: #c5f1dd;
+      --mint-strong: #9deec5;
+      --border-soft: rgba(0,0,0,0.18);
+      --border-dark: rgba(148,163,184,0.45);
+      --text-dark: #111827;
+      --text-muted-dark: #6b7280;
+      --text-light: #e5e7eb;
+      --text-muted-light: #9ca3af;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background: linear-gradient(to bottom, var(--cream) 0 46%, var(--dark) 46% 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      padding: 14px 20px 8px;
+      border-bottom: 1px solid var(--border-soft);
+      background: var(--cream);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-brand {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .lang-toggle {
+      display: flex;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+      background: #f8f4ea;
+    }
+
+    .lang-btn {
+      padding: 5px 10px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted-dark);
+      cursor: pointer;
+      min-width: 46px;
+      text-align: center;
+      transition: all 0.16s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--mint);
+      color: #000;
+      font-weight: 600;
+    }
+
+    .sound-btn {
+      position: relative;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f8f4ea;
+      padding: 4px 8px 4px 7px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.16s ease;
+    }
+
+    .sound-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    }
+
+    .sound-waves {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      height: 10px;
+    }
+
+    .sound-wave {
+      width: 2px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31,41,55,0.4);
+      opacity: 0;
+    }
+
+    .sound-btn.on .sound-wave {
+      opacity: 1;
+      background: #111827;
+      animation: wavePulse 1.2s infinite ease-in-out;
+    }
+
+    .sound-btn.on .sound-wave:nth-child(2) { animation-delay: 0.12s; }
+    .sound-btn.on .sound-wave:nth-child(3) { animation-delay: 0.24s; }
+
+    @keyframes wavePulse {
+      0%,100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
+    }
+
+    .nav-start-btn {
+      border-radius: 999px;
+      border: 1px solid #000;
+      background: #000;
+      color: var(--cream);
+      padding: 6px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.16s ease;
+    }
+
+    .nav-start-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 18px 20px 40px;
+    }
+
+    /* LANDING / WELCOME PAGE */
+
+    .hero {
+      background: var(--cream-soft);
+      border-radius: 20px;
+      border: 1px solid var(--border-soft);
+      padding: 30px 26px;
+      margin-top: 12px;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted-dark);
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+
+    .hero-sub {
+      max-width: 580px;
+      font-size: 14px;
+      color: var(--text-muted-dark);
+      margin: 0 0 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: 1px solid #000;
+      background: #000;
+      color: var(--cream);
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.16s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+    }
+
+    /* QUIZ PAGE */
+
+    .quiz-area-wrapper {
+      margin-top: 40px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--dark);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      display: none; /* hidden until Start */
+    }
+
+    .quiz-header-bar {
+      background: var(--dark);
+      color: var(--text-light);
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid rgba(55,65,81,0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .quiz-header-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .quiz-header-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text-muted-light);
+    }
+
+    .chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .chip-accent {
+      border-color: var(--mint-strong);
+      color: var(--mint-strong);
+    }
+
+    .quiz-shell {
+      padding: 18px 20px 20px;
+      background: var(--dark-soft);
+      color: var(--text-light);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Setup */
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .setup-grid { grid-template-columns: minmax(0,1fr); }
+    }
+
+    .setup-card {
+      border-radius: 16px;
+      border: 1px solid rgba(55,65,81,0.8);
+      background: #020617;
+      padding: 14px 14px 16px;
+      font-size: 12px;
+      color: var(--text-muted-light);
+    }
+
+    .setup-card h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .option-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .count-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: #020617;
+      color: var(--text-muted-light);
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      min-width: 44px;
+      text-align: center;
+      transition: all 0.14s ease;
+    }
+
+    .count-btn.active {
+      background: var(--mint);
+      border-color: var(--mint-strong);
+      color: #000;
+      font-weight: 600;
+    }
+
+    .divider-label {
+      font-size: 10px;
+      color: var(--text-muted-light);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 14px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .divider-label::before,
+    .divider-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(75,85,99,0.9), transparent);
+    }
+
+    .setup-note {
+      font-size: 11px;
+      color: var(--text-muted-light);
+    }
+
+    #setupBullets {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 11px;
+      color: var(--text-muted-light);
+    }
+
+    #setupBullets li { margin-bottom: 2px; }
+
+    .btn-start {
+      margin-top: 12px;
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f9fafb;
+      color: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.14s ease;
+    }
+
+    .btn-start:hover {
+      background: var(--mint);
+      color: #000;
+    }
+
+    .btn-start:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    /* Quiz */
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted-light);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(31,41,55,0.9);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar-inner {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(to right, var(--mint), var(--mint-strong));
+      transition: width .2s ease-out;
+    }
+
+    .question-card {
+      border-radius: 16px;
+      border: 1px solid rgba(55,65,81,0.8);
+      background: #020617;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .options-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .option-item {
+      border-radius: 10px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: #020617;
+      padding: 7px 9px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      transition: all .14s ease;
+    }
+
+    .option-item:hover {
+      border-color: var(--mint-strong);
+      background: #020617;
+    }
+
+    .option-item.selected {
+      border-color: var(--mint-strong);
+      background: rgba(197,241,221,0.05);
+      box-shadow: 0 0 0 1px rgba(197,241,221,0.4);
+    }
+
+    .option-label {
+      min-width: 16px;
+      font-weight: 600;
+      color: var(--text-muted-light);
+    }
+
+    .option-text { flex: 1; }
+
+    .nav-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-nav {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: #020617;
+      color: var(--text-muted-light);
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: all .14s ease;
+    }
+
+    .btn-nav.primary {
+      background: #f9fafb;
+      color: #020617;
+      border-color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .btn-nav.primary:hover {
+      background: var(--mint);
+      color: #000;
+      border-color: var(--mint-strong);
+    }
+
+    .btn-nav:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    /* Result */
+
+    .result-card {
+      border-radius: 16px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: #020617;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--text-muted-light);
+    }
+
+    .result-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted-light);
+      margin-bottom: 4px;
+    }
+
+    .result-score {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--mint);
+      margin-bottom: 6px;
+    }
+
+    .result-detail { margin-bottom: 10px; }
+
+    .badge-soft {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(75,85,99,0.9);
+      font-size: 10px;
+    }
+
+    .badge-soft.low { border-color: #f97373; color:#fecaca; }
+    .badge-soft.mid { border-color: #facc15; color:#facc15; }
+    .badge-soft.good{ border-color: var(--mint-strong); color: var(--mint-strong); }
+
+    .result-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: #020617;
+      color: var(--text-muted-light);
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .14s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--mint-strong);
+      color: var(--mint-strong);
+    }
+
+    .footnote {
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--text-muted-light);
+    }
+
+    /* Footer */
+
+    footer {
+      max-width: 1040px;
+      margin: 24px auto 20px;
+      padding: 0 20px;
+      font-size: 11px;
+      color: var(--text-muted-dark);
+      text-align: center;
+    }
+
+    footer a {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 22px 18px; }
+      .quiz-header-bar { flex-direction: column; align-items: flex-start; }
+      .nav { flex-direction: column; align-items: flex-start; }
+      .nav-right { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <!-- backsound -->
+  <audio id="bgAudio" loop>
+    <source src="backsound.mp3" type="audio/mpeg" />
+  </audio>
+
+  <header>
+    <div class="nav">
+      <div class="nav-brand">Rialo Quiz</div>
+      <div class="nav-right">
+        <button class="sound-btn" id="soundToggleBtn" title="Toggle sound">
+          <span id="soundIcon">🔈</span>
+          <span class="sound-waves">
+            <span class="sound-wave"></span>
+            <span class="sound-wave"></span>
+            <span class="sound-wave"></span>
+          </span>
+        </button>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="langIdBtn">ID</button>
+          <button class="lang-btn" id="langEnBtn">EN</button>
+        </div>
+        <button class="nav-start-btn" id="navStartBtn">
+          <span id="navStartLabel">Start quiz</span> →
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE 1: WELCOME -->
+    <section class="hero" id="welcomeSection">
+      <div class="hero-tag">· DISCOVERY · FUN · CONVICTION</div>
+      <h1 class="hero-title">Welcome to Rialo Quiz</h1>
+      <p class="hero-sub" id="heroSubtitle">
+        Test seberapa "Rialo pilled" kamu. Pilih jumlah pertanyaan, pilih bahasa, dan
+        lihat apakah mindset kamu sudah nyambung dengan chain yang dibangun untuk
+        dunia nyata.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="heroStartBtn">
+          <span id="heroStartLabel">Start quiz</span> →
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGE 2: QUIZ -->
+    <section class="quiz-area-wrapper" id="quizArea">
+      <div class="quiz-header-bar">
+        <div class="quiz-header-title" id="quizHeaderTitle">Rialo knowledge check</div>
+        <div class="quiz-header-meta">
+          <span class="chip chip-accent" id="chipMode">QUIZ MODE</span>
+          <span class="chip" id="chipLang">LANGUAGE: INDONESIA</span>
+        </div>
+      </div>
+
+      <div class="quiz-shell">
+        <!-- SETUP -->
+        <div class="screen active" id="screenSetup">
+          <div class="setup-grid">
+            <div class="setup-card">
+              <h3 id="setupTitle">Pilih jumlah pertanyaan</h3>
+              <p class="setup-note" id="setupNote">
+                Semakin banyak pertanyaan, semakin kelihatan seberapa dalam kamu paham Rialo.
+              </p>
+              <div class="option-row" id="countOptions"></div>
+              <div class="divider-label" id="dividerLabel">Pengaturan quiz</div>
+              <ul id="setupBullets"></ul>
+              <button class="btn-start" id="startQuizBtn">
+                <span id="startQuizLabel">Mulai quiz</span> →
+              </button>
+            </div>
+            <div class="setup-card">
+              <h3 id="previewTitle">Preview sesi</h3>
+              <p id="previewBody">
+                Pilih bahasa, tentukan jumlah pertanyaan, lalu tekan Start. Quiz ini
+                berdasarkan narasi dan desain Rialo sebagai chain event-driven yang
+                terhubung ke dunia nyata.
+              </p>
+              <div style="margin-top:8px;font-size:11px;">
+                <div id="previewLangLine">
+                  • Bahasa aktif: <strong>Indonesia</strong>
+                </div>
+                <div id="previewCountLine">
+                  • Jumlah pertanyaan: <strong>10</strong>
+                </div>
+                <div id="previewHint">
+                  • Kamu bisa ulang dan ganti jumlah pertanyaan kapan saja.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUIZ -->
+        <div class="screen" id="screenQuiz">
+          <div class="question-header">
+            <div>
+              <span id="questionCounterLabel">Pertanyaan</span>
+              <span id="questionCounter">1 / 10</span>
+            </div>
+            <div id="answeredCounter">0 terjawab</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" id="progressBarInner"></div>
+          </div>
+          <div class="question-card">
+            <div class="question-text" id="questionText">Question text</div>
+            <ul class="options-list" id="optionsList"></ul>
+          </div>
+          <div class="nav-row">
+            <button class="btn-nav" id="prevBtn">← <span id="prevLabel">Sebelumnya</span></button>
+            <button class="btn-nav primary" id="nextBtn">
+              <span id="nextLabel">Berikutnya</span> →
+            </button>
+          </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="screen" id="screenResult">
+          <div class="result-card">
+            <div class="result-tag" id="resultTag">Hasil quiz</div>
+            <div class="result-score" id="resultScore">80</div>
+            <div class="result-detail" id="resultDetail">
+              Kamu menjawab 4 benar dari 5 pertanyaan. Nilai kamu: 80.
+            </div>
+            <div class="result-row">
+              <span class="badge-soft" id="resultBadge">Rialo curious</span>
+            </div>
+            <div class="result-row" style="margin-top:12px;">
+              <button class="btn-secondary" id="retryBtn">🔄 <span id="retryLabel">Coba lagi</span></button>
+              <button class="btn-secondary" id="shareBtn">🐦 <span id="shareLabel">Share di Twitter</span></button>
+            </div>
+            <div class="footnote" id="resultHint">
+              Tip: ulang quiz dengan jumlah pertanyaan berbeda untuk lihat seberapa konsisten skor kamu.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made by
+    <a href="https://x.com/tiramitsuXBT" target="_blank" rel="noopener noreferrer">
+      Tiramitsu ETH
+    </a>
+  </footer>
+
+  <script>
+    // ==== QUESTIONS DATA (ID + EN) ====
+    const QUESTIONS = [
+      {id:1,text:{id:"Apa fokus utama Rialo sebagai blockchain baru?",en:"What is Rialo's main focus as a new blockchain?"},options:{id:["NFT marketplace","Jembatan Web2–Web3","Bridge multichain","Metaverse"],en:["NFT marketplace","Web2–Web3 bridge","Multichain bridge","Metaverse"]},correctIndex:1},
+      {id:2,text:{id:"Siapa pembangun utama Rialo?",en:"Who is the primary builder of Rialo?"},options:{id:["Polygon Labs","Subzero Labs","Optimism Foundation","Circle"],en:["Polygon Labs","Subzero Labs","Optimism Foundation","Circle"]},correctIndex:1},
+      {id:3,text:{id:"Arsitektur smart contract Rialo mendukung apa?",en:"What does Rialo's smart contract architecture support?"},options:{id:["EVM Only","Bitcoin Script","RISC-V & Solana VM compatibility","WASM saja"],en:["EVM only","Bitcoin Script","RISC-V & Solana VM compatibility","WASM only"]},correctIndex:2},
+      {id:4,text:{id:"Fitur apa yang membuat Rialo bisa membaca data dunia nyata?",en:"Which feature lets Rialo read real-world data?"},options:{id:["Multi-bridge validator","Native web connectivity","Proof-of-Web","Light-client oracles"],en:["Multi-bridge validator","Native web connectivity","Proof-of-Web","Light-client oracles"]},correctIndex:1},
+      {id:5,text:{id:"Mengapa Rialo cocok untuk Real-World Assets (RWA)?",en:"Why is Rialo a good fit for Real-World Assets (RWA)?"},options:{id:["Punya stablecoin sendiri","Integrasi data dunia nyata relevan secara native","Limit transaksi rendah","Tidak butuh regulator"],en:["It has its own stablecoin","Real-world data integration is native and relevant","Low transaction limit","No regulators are needed"]},correctIndex:1},
+      {id:6,text:{id:"Kenapa developer mudah membangun aplikasi di Rialo?",en:"Why is it easy for developers to build apps on Rialo?"},options:{id:["Menggunakan database SQL","Memiliki kompatibilitas Solana VM","Smart contract bisa tanpa coding","Menghapus gas fee"],en:["It uses SQL databases","It has Solana VM compatibility","Smart contracts require no coding","It removes gas fees entirely"]},correctIndex:1},
+      {id:7,text:{id:"Apa yang membedakan Rialo dari chain Web3 tradisional?",en:"What differentiates Rialo from traditional Web3 chains?"},options:{id:["Tidak punya wallet","Didesain untuk aplikasi real-world","Hanya untuk game","Hanya proof-of-work"],en:["It has no wallets","It is designed for real-world applications","It is only for games","It only supports proof-of-work"]},correctIndex:1},
+      {id:8,text:{id:"Apa tantangan blockchain lama yang diselesaikan Rialo?",en:"Which old blockchain challenge does Rialo solve?"},options:{id:["Gas fee terlalu rendah","Tidak reaktif terhadap event dunia nyata","Tidak bisa staking","Terlalu cepat"],en:["Gas fees are too low","They are not reactive to real-world events","They cannot stake","They are too fast"]},correctIndex:1},
+      {id:9,text:{id:"Aplikasi Rialo bisa merespons event apa?",en:"What kind of events can Rialo applications respond to?"},options:{id:["Harga saham, cuaca, API dunia nyata","Tweet meme","Gas price Ethereum","Mining hash rate"],en:["Stock prices, weather, real-world APIs","Meme tweets","Ethereum gas prices only","Mining hash rate"]},correctIndex:0},
+      {id:10,text:{id:"Apa tujuan Rialo untuk user mainstream?",en:"What is Rialo's goal for mainstream users?"},options:{id:["Membuat wallet jadi mahal","Onboarding mudah via email/SMS","Membatasi akses","Menghapus identitas"],en:["Make wallets more expensive","Easy onboarding via email/SMS","Limit access","Remove identity entirely"]},correctIndex:1},
+      {id:11,text:{id:"Kenapa tidak butuh oracle kompleks di Rialo?",en:"Why doesn't Rialo need complex oracles?"},options:{id:["Semua data disimpan di IPFS","Native internet access untuk smart contract","Node validator dapat broadcast data manual","Mereka memakai bridge Solana"],en:["All data is stored on IPFS","Smart contracts have native internet access","Validator nodes broadcast data manually","It uses a Solana bridge"]},correctIndex:1},
+      {id:12,text:{id:"Apa jenis logika yang dipakai Rialo?",en:"What kind of logic does Rialo use?"},options:{id:["Proof-of-Meme logic","Event-driven logic","Batch processing harian","Manual on-chain update"],en:["Proof-of-Meme logic","Event-driven logic","Daily batch processing","Manual on-chain updates"]},correctIndex:1},
+      {id:13,text:{id:"Aset apa yang cocok ditokenisasi di Rialo?",en:"What kind of assets are suitable to tokenize on Rialo?"},options:{id:["Screenshot","Properti, invoice, komoditas","Meme","GIF"],en:["Screenshots","Property, invoices, commodities","Memes","GIFs"]},correctIndex:1},
+      {id:14,text:{id:"Konsep “reactive contracts” berarti?",en:"What does the concept of “reactive contracts” mean?"},options:{id:["Kontrak tidur sepanjang hari","Kontrak hidup merespons perubahan data","Kontrak butuh update manual","Kontrak harus ditutup dulu"],en:["Contracts sleep all day","Contracts actively respond to changing data","Contracts require manual updates","Contracts must be closed first"]},correctIndex:1},
+      {id:15,text:{id:"Mengapa developer Web2 bisa cepat adaptasi?",en:"Why can Web2 developers adapt quickly to Rialo?"},options:{id:["Rialo pakai Excel","Dukungan API-style logic & accessibility","Smart contract dihapus","Tidak ada pemrograman"],en:["Rialo uses Excel","It supports API-style logic and accessibility","Smart contracts are removed","No programming is required"]},correctIndex:1},
+      {id:16,text:{id:"Model identitas yang didukung Rialo?",en:"Which identity model does Rialo support?"},options:{id:["Email, SMS, sosial login","KTP fisik","Face ID scanner","Paspor biometrik"],en:["Email, SMS, social logins","Physical ID cards","Face ID scanners","Biometric passports"]},correctIndex:0},
+      {id:17,text:{id:"Keunggulan user onboarding di Rialo?",en:"What is a key advantage of user onboarding on Rialo?"},options:{id:["Tanpa blockchain","Semudah Web2 login","Memerlukan 12 seed phrase kompleks","Hanya bisa via hardware wallet"],en:["No blockchain at all","As easy as Web2 login","Requires 12 complex seed phrases","Only possible via hardware wallets"]},correctIndex:1},
+      {id:18,text:{id:"Tujuan utama Rialo terhadap Web3 UX?",en:"What is Rialo's main goal for Web3 UX?"},options:{id:["Membuat UX lebih sulit","Menyamakan UX Web3 dengan Web2","Menghapus UI","Membuat aplikasi offline"],en:["Make UX harder","Make Web3 UX feel like Web2","Remove the UI","Make apps fully offline"]},correctIndex:1},
+      {id:19,text:{id:"Apa yang ingin Rialo hilangkan dari pengalaman blockchain lama?",en:"What does Rialo want to remove from legacy blockchain experience?"},options:{id:["Opsi login","Kompleksitas oracles & middleware","Aplikasi mobile","Validator"],en:["Login options","Oracle and middleware complexity","Mobile apps","Validators"]},correctIndex:1},
+      {id:20,text:{id:"Dengan Rialo, developer dapat membuat aplikasi yang…",en:"With Rialo, developers can build applications that…"},options:{id:["Tidak punya user","Bisa otomatis merespons data real-time","Non-interaktif","Hanya offline"],en:["Have no users","Automatically respond to real-time data","Are non-interactive","Are offline only"]},correctIndex:1},
+      {id:21,text:{id:"Mengapa Rialo disebut gen-2 blockchain?",en:"Why is Rialo referred to as a gen-2 blockchain?"},options:{id:["Dipakai untuk game saja","Fokus pada data & interaktivitas dunia nyata","Hanya untuk staking","Tidak bisa smart contract"],en:["It is only used for games","It focuses on real-world data and interactivity","It is only for staking","It cannot run smart contracts"]},correctIndex:1},
+      {id:22,text:{id:"RISC-V memberikan apa pada Rialo?",en:"What does RISC-V provide for Rialo?"},options:{id:["GPU mining","Eksekusi smart contract fleksibel","Insentif farming","SocialFi"],en:["GPU mining","Flexible smart contract execution","Farming incentives","SocialFi"]},correctIndex:1},
+      {id:23,text:{id:"Solana VM compatibility memberi keuntungan berupa…",en:"Solana VM compatibility gives what benefit?"},options:{id:["Node ekstra berat","Porting aplikasi Solana lebih mudah","Beban gas lebih mahal","DeFi tidak berjalan"],en:["Heavier nodes","Easier porting of Solana applications","More expensive gas","DeFi doesn't work"]},correctIndex:1},
+      {id:24,text:{id:"Mengapa penting Rialo bisa akses API langsung?",en:"Why is it important that Rialo can access APIs directly?"},options:{id:["Untuk akses meme","Untuk validasi data real-world tanpa pihak ketiga","Untuk mining","Untuk staking murah"],en:["To access memes","To validate real-world data without third parties","For mining","For cheap staking"]},correctIndex:1},
+      {id:25,text:{id:"Tujuan Rialo terhadap developer?",en:"What is Rialo's goal for developers?"},options:{id:["Membuat coding makin rumit","Memberi canvas fleksibel membangun aplikasi real-world","Menghapus smart contract","Mengunci akses"],en:["Make coding more complicated","Give a flexible canvas for building real-world apps","Remove smart contracts","Lock access down"]},correctIndex:1},
+      {id:26,text:{id:"Salah satu contoh aplikasi ideal di Rialo?",en:"Which is an ideal example of an application on Rialo?"},options:{id:["Jam analog on-chain","Insurance parametric real-time","Kalkulator on-chain","Screenshot NFT"],en:["Analog on-chain clock","Real-time parametric insurance","On-chain calculator","Screenshot NFTs"]},correctIndex:1},
+      {id:27,text:{id:"Kenapa blockchain tradisional tidak cocok untuk aplikasi real-world?",en:"Why are traditional blockchains not ideal for real-world applications?"},options:{id:["Terlalu cepat","Tidak punya akses data Web2 bawaan","Tidak punya validator","Terlalu murah"],en:["They are too fast","They lack native Web2 data access","They have no validators","They are too cheap"]},correctIndex:1},
+      {id:28,text:{id:"Apa manfaat onboarding Web2-style?",en:"What is a benefit of Web2-style onboarding?"},options:{id:["User langsung kabur","Aplikasi mudah dipakai tanpa pengalaman crypto","Gas fee hilang","Blok jadi lambat"],en:["Users immediately leave","Apps are easy to use without crypto experience","Gas fees disappear","Blocks become slower"]},correctIndex:1},
+      {id:29,text:{id:"Rialo menargetkan user dari golongan?",en:"Which user groups does Rialo target?"},options:{id:["Trader saja","Developer & user mainstream Web2","Miner Bitcoin","Gamer retro"],en:["Traders only","Developers & mainstream Web2 users","Bitcoin miners","Retro gamers"]},correctIndex:1},
+      {id:30,text:{id:"Web connectivity Rialo meminimalkan kebutuhan apa?",en:"Rialo's web connectivity minimizes the need for what?"},options:{id:["Oracle eksternal","Token","Validator","Airdrop"],en:["External oracles","Tokens","Validators","Airdrops"]},correctIndex:0},
+      {id:31,text:{id:"Apa nilai utama yang dikejar Rialo?",en:"What core value does Rialo aim for?"},options:{id:["UX sederhana + power real-world","Mining murah","Social token","Market maker"],en:["Simple UX + real-world power","Cheap mining","Social tokens","Market makers"]},correctIndex:0},
+      {id:32,text:{id:"Apa keuntungan privacy layer Rialo?",en:"What is an advantage of Rialo's privacy layer?"},options:{id:["User tak bisa login","Data personal tetap terenkripsi","Semua data publik","Menghapus smart contract"],en:["Users cannot log in","Personal data stays encrypted","All data is public","Smart contracts are removed"]},correctIndex:1},
+      {id:33,text:{id:"Tuple ideal RWA di Rialo?",en:"What is an ideal RWA tuple on Rialo?"},options:{id:["Data statis","Aset yang butuh updating real-time","Aset meme","Pixel art"],en:["Static data","Assets needing real-time updating","Meme assets","Pixel art"]},correctIndex:1},
+      {id:34,text:{id:"Siapa target developer utama Rialo?",en:"Who are the main developer targets for Rialo?"},options:{id:["Developer C++ saja","Developer Web2 dan Web3 yang ingin membuat aplikasi interaktif","Admin Discord","Bot Telegram"],en:["C++ developers only","Web2 and Web3 devs who want to build interactive apps","Discord admins","Telegram bots"]},correctIndex:1},
+      {id:35,text:{id:"Apa yang membuat Rialo scalable?",en:"What makes Rialo scalable?"},options:{id:["CPU mining","Arsitektur modular + VM cepat","Snapshot NFT","Proof-of-Music"],en:["CPU mining","Modular architecture + fast VM","NFT snapshots","Proof-of-Music"]},correctIndex:1},
+      {id:36,text:{id:"Apa hasil akhirnya jika aplikasi memakai event-driven smart contracts?",en:"What is the result of using event-driven smart contracts?"},options:{id:["Aplikasi pasif","Aplikasi yang “hidup”","Aplikasi offline","Aplikasi tanpa user"],en:["Passive applications","Applications that feel ‘alive’","Offline applications","Applications with no users"]},correctIndex:1},
+      {id:37,text:{id:"Smart contract Rialo dapat “mendengarkan” event dari?",en:"Rialo smart contracts can ‘listen’ to events from?"},options:{id:["TikTok Live","API dunia nyata","Hardware mining","File ZIP"],en:["TikTok Live","Real-world APIs","Mining hardware","ZIP files"]},correctIndex:1},
+      {id:38,text:{id:"Mengapa Rialo tidak mengandalkan oracles?",en:"Why doesn't Rialo rely on oracles?"},options:{id:["Oracles dilarang","Karena native web access sudah memadai","Karena mahal","Karena tidak kompatibel"],en:["Oracles are banned","Because native web access is enough","Because they are expensive","Because they are incompatible"]},correctIndex:1},
+      {id:39,text:{id:"Apa manfaat bagi bisnis Web2 jika pindah ke Rialo?",en:"What is a benefit for Web2 businesses moving to Rialo?"},options:{id:["Jadi lebih viral","Aplikasi lebih otomatis & transparan","Bisa mining","Tidak perlu user"],en:["They become more viral","Apps become more automated and transparent","They can mine","They no longer need users"]},correctIndex:1},
+      {id:40,text:{id:"Kenapa developer menyukai Rialo?",en:"Why do developers like Rialo?"},options:{id:["Dokumentasi kosong","Aplikasi bisa interaktif seperti Web2","Node sangat lambat","Gas fee wajib mahal"],en:["Documentation is empty","Apps can be interactive like Web2","Nodes are extremely slow","Gas fees must be expensive"]},correctIndex:1},
+      {id:41,text:{id:"Tujuan besar Rialo dalam desain chain-nya?",en:"What is Rialo's big goal in its chain design?"},options:{id:["Menghilangkan internet","Menyamakan kenyamanan Web2 dengan trust Web3","Membuat wallet wajib rumit","Menghapus interoperabilitas"],en:["Remove the internet","Match Web2 comfort with Web3 trust","Make wallets necessarily complex","Remove interoperability"]},correctIndex:1},
+      {id:42,text:{id:"RWA menjadi “real” di Rialo karena…",en:"RWA becomes truly ‘real’ on Rialo because…"},options:{id:["Meme","Respons event data otomatis","Screenshot","Mining murah"],en:["Memes","Automatic response to data events","Screenshots","Cheap mining"]},correctIndex:1},
+      {id:43,text:{id:"Developer Solana bisa pindah ke Rialo dengan?",en:"How can Solana developers move to Rialo?"},options:{id:["Rewrite total","Porting via kompatibilitas SVM","Copy-paste tanpa coding","Aplikasi PNG"],en:["Total rewrite","Porting via SVM compatibility","Copy-paste without coding","PNG apps"]},correctIndex:1},
+      {id:44,text:{id:"Onboarding yang simpel membuat —",en:"Simple onboarding leads to —"},options:{id:["User drop-off menurun","Gas naik","CPU panas","Chain mati"],en:["Lower user drop-off","Higher gas","Hotter CPUs","Chain death"]},correctIndex:0},
+      {id:45,text:{id:"Aplikasi yang membutuhkan update cepat cocok karena…",en:"Apps that need fast updates are suitable because…"},options:{id:["Block time panjang","Rialo mendukung reactive logic","Kontrak statis","Tidak bisa menerima data"],en:["Block times are long","Rialo supports reactive logic","Contracts are static","They cannot receive data"]},correctIndex:1},
+      {id:46,text:{id:"API real-world bisa dipakai untuk…",en:"Real-world APIs can be used for…"},options:{id:["Meme scoring","Harga pasar, status pengiriman, cuaca, finansial","Screenshot check","Format PDF"],en:["Meme scoring","Market prices, shipment status, weather, finance","Screenshot checks","PDF formatting"]},correctIndex:1},
+      {id:47,text:{id:"Apa janji core Rialo?",en:"What is Rialo's core promise?"},options:{id:["Blockchain untuk trader saja","Blockchain yang terasa seperti Web2","Blockchain tanpa internet","Blockchain hanya untuk NFT"],en:["Blockchain only for traders","Blockchain that feels like Web2","Blockchain without internet","Blockchain only for NFTs"]},correctIndex:1},
+      {id:48,text:{id:"Kenapa RWA butuh reaktivitas?",en:"Why do RWAs need reactivity?"},options:{id:["Harga & kondisi aset berubah","Tidak berubah","Hanya bersifat estetika","Agar tidak likuid"],en:["Asset prices and conditions change","They never change","Purely for aesthetics","So they are illiquid"]},correctIndex:0},
+      {id:49,text:{id:"Smart contract yang tidak statis di Rialo memungkinkan apa?",en:"Non-static smart contracts on Rialo enable what?"},options:{id:["Auto-delete","Automasi real-world workflows","Gas shutdown","Freeze account"],en:["Auto-deletion","Automation of real-world workflows","Gas shutdown","Account freezes"]},correctIndex:1},
+      {id:50,text:{id:"Visi akhir Rialo terhadap blockchain?",en:"What is Rialo's ultimate vision for blockchain?"},options:{id:["Blockchain sebagai background, value di depan","Blockchain sebagai pusat perhatian","Blockchain hanya untuk spekulasi","Blockchain tanpa aplikasi"],en:["Blockchain in the background, value up front","Blockchain at the center of attention","Blockchain only for speculation","Blockchain without applications"]},correctIndex:0}
+    ];
+
+    const QUESTION_COUNTS = [5,10,20,30,40,50];
+
+    let currentLang = "id";
+    let selectedCount = 10;
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = {};
+    let soundOn = false;
+
+    const $ = id => document.getElementById(id);
+    const audioEl = $("bgAudio");
+
+    const TEXT = {
+      navStart:{id:"Start quiz",en:"Start quiz"},
+      heroSubtitle:{
+        id:'Test seberapa "Rialo pilled" kamu. Pilih jumlah pertanyaan, pilih bahasa, dan lihat apakah mindset kamu sudah nyambung dengan chain yang dibangun untuk dunia nyata.',
+        en:'Test how “Rialo-pilled” you are. Choose question count, choose language, and see if your mindset matches a chain built for the real world.'
+      },
+      heroStart:{id:"Mulai quiz",en:"Start quiz"},
+      quizHeaderTitle:{id:"Rialo knowledge check",en:"Rialo knowledge check"},
+      chipMode:{id:"QUIZ MODE",en:"QUIZ MODE"},
+      chipLangPrefix:{id:"BAHASA:",en:"LANGUAGE:"},
+      setupTitle:{id:"Pilih jumlah pertanyaan",en:"Choose number of questions"},
+      setupNote:{id:"Semakin banyak pertanyaan, semakin kelihatan seberapa dalam kamu paham Rialo.",en:"The more questions you pick, the clearer your depth of understanding."},
+      dividerLabel:{id:"Pengaturan quiz",en:"Quiz options"},
+      bullets:{
+        id:["Soal diacak setiap kali mulai.","Result muncul setelah semua pertanyaan terjawab.","Skor dalam bentuk jumlah benar + persentase."],
+        en:["Questions are randomized each time you start.","Results show after all questions are answered.","Score shows as correct count + percentage."]
+      },
+      startQuizLabel:{id:"Mulai quiz",en:"Start quiz"},
+      previewTitle:{id:"Preview sesi",en:"Session preview"},
+      previewBody:{id:"Pilih bahasa, tentukan jumlah pertanyaan, lalu tekan Start. Quiz ini berdasarkan narasi dan desain Rialo sebagai chain event-driven yang terhubung ke dunia nyata.",en:"Pick your language, choose how many questions, then press Start. This quiz follows Rialo’s narrative as an event-driven chain wired to the real world."},
+      previewLangLine:{id:"• Bahasa aktif: ",en:"• Active language: "},
+      previewCountLine:{id:"• Jumlah pertanyaan: ",en:"• Number of questions: "},
+      previewHint:{id:"• Kamu bisa ulang dan ganti jumlah pertanyaan kapan saja.",en:"• You can restart and change question count anytime."},
+      questionCounterLabel:{id:"Pertanyaan",en:"Question"},
+      answeredSuffix:{id:"terjawab",en:"answered"},
+      prevLabel:{id:"Sebelumnya",en:"Previous"},
+      nextLabel:{id:"Berikutnya",en:"Next"},
+      submitLabel:{id:"Selesai",en:"Finish"},
+      resultTag:{id:"Hasil quiz",en:"Quiz result"},
+      retryLabel:{id:"Coba lagi",en:"Try again"},
+      shareLabel:{id:"Share di Twitter",en:"Share on Twitter"},
+      resultHint:{id:"Tip: ulang quiz dengan jumlah pertanyaan berbeda untuk lihat seberapa konsisten skor kamu.",en:"Tip: re-run the quiz with a different question count to see how consistent your score is."}
+    };
+
+    function renderStaticText(){
+      $("navStartLabel").textContent = TEXT.navStart[currentLang];
+      $("heroSubtitle").textContent = TEXT.heroSubtitle[currentLang];
+      $("heroStartLabel").textContent = TEXT.heroStart[currentLang];
+
+      $("quizHeaderTitle").textContent = TEXT.quizHeaderTitle[currentLang];
+      $("chipMode").textContent = TEXT.chipMode[currentLang];
+      $("chipLang").textContent =
+        TEXT.chipLangPrefix[currentLang] + " " + (currentLang==="id"?"INDONESIA":"ENGLISH");
+
+      $("setupTitle").textContent = TEXT.setupTitle[currentLang];
+      $("setupNote").textContent  = TEXT.setupNote[currentLang];
+      $("dividerLabel").textContent = TEXT.dividerLabel[currentLang];
+      $("startQuizLabel").textContent = TEXT.startQuizLabel[currentLang];
+      $("previewTitle").textContent = TEXT.previewTitle[currentLang];
+      $("previewBody").textContent  = TEXT.previewBody[currentLang];
+
+      const bullets = TEXT.bullets[currentLang];
+      const ul = $("setupBullets");
+      ul.innerHTML="";
+      bullets.forEach(t=>{
+        const li=document.createElement("li");
+        li.textContent=t;
+        ul.appendChild(li);
+      });
+
+      $("previewLangLine").innerHTML =
+        TEXT.previewLangLine[currentLang] + "<strong>"+(currentLang==="id"?"Indonesia":"English")+"</strong>";
+      $("previewCountLine").innerHTML =
+        TEXT.previewCountLine[currentLang]+"<strong>"+selectedCount+"</strong>";
+      $("previewHint").textContent = TEXT.previewHint[currentLang];
+
+      $("questionCounterLabel").textContent = TEXT.questionCounterLabel[currentLang];
+      $("prevLabel").textContent = TEXT.prevLabel[currentLang];
+      $("nextLabel").textContent = TEXT.nextLabel[currentLang];
+      $("resultTag").textContent = TEXT.resultTag[currentLang];
+      $("retryLabel").textContent = TEXT.retryLabel[currentLang];
+      $("shareLabel").textContent = TEXT.shareLabel[currentLang];
+      $("resultHint").textContent = TEXT.resultHint[currentLang];
+
+      if(currentQuestions.length) renderQuestion();
+    }
+
+    function renderCountButtons(){
+      const container = $("countOptions");
+      container.innerHTML="";
+      QUESTION_COUNTS.forEach(c=>{
+        const btn=document.createElement("button");
+        btn.type="button";
+        btn.className="count-btn"+(c===selectedCount?" active":"");
+        btn.textContent=c;
+        btn.addEventListener("click",()=>{
+          selectedCount=c;
+          renderCountButtons();
+          renderStaticText();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function shuffle(arr){
+      const a=arr.slice();
+      for(let i=a.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+      return a;
+    }
+
+    function showScreen(which){
+      ["screenSetup","screenQuiz","screenResult"].forEach(id=>{
+        $(id).classList.remove("active");
+      });
+      if(which==="setup")$("screenSetup").classList.add("active");
+      if(which==="quiz") $("screenQuiz").classList.add("active");
+      if(which==="result")$("screenResult").classList.add("active");
+    }
+
+    function goToQuizPage(){
+      $("welcomeSection").style.display = "none";
+      $("quizArea").style.display = "block";
+      showScreen("setup");
+      document.getElementById("quizArea").scrollIntoView({behavior:"smooth"});
+    }
+
+    function startQuiz(){
+      currentQuestions = shuffle(QUESTIONS).slice(0,selectedCount);
+      currentIndex=0;
+      userAnswers={};
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      const q=currentQuestions[currentIndex];
+      if(!q)return;
+      $("questionText").textContent = q.text[currentLang];
+      $("questionCounter").textContent = (currentIndex+1)+" / "+currentQuestions.length;
+
+      const answeredCount = Object.keys(userAnswers).length;
+      $("answeredCounter").textContent =
+        answeredCount+" "+TEXT.answeredSuffix[currentLang];
+
+      const progress = (answeredCount/currentQuestions.length)*100 || 0;
+      $("progressBarInner").style.width = progress+"%";
+
+      const list=$("optionsList");
+      list.innerHTML="";
+      const labels=["A","B","C","D"];
+      q.options[currentLang].forEach((opt,idx)=>{
+        const li=document.createElement("li");
+        li.className="option-item"+(userAnswers[q.id]===idx?" selected":"");
+        li.addEventListener("click",()=>{
+          userAnswers[q.id]=idx;
+          renderQuestion();
+        });
+        const lab=document.createElement("span");
+        lab.className="option-label";
+        lab.textContent=labels[idx];
+        const txt=document.createElement("span");
+        txt.className="option-text";
+        txt.textContent=opt;
+        li.appendChild(lab);li.appendChild(txt);
+        list.appendChild(li);
+      });
+
+      updateNavButtons();
+    }
+
+    function updateNavButtons(){
+      $("prevBtn").disabled = currentIndex===0;
+      const answeredCount = Object.keys(userAnswers).length;
+      const allAnswered = answeredCount===currentQuestions.length;
+      const isLast = currentIndex===currentQuestions.length-1;
+      $("nextLabel").textContent =
+        isLast && allAnswered ? TEXT.submitLabel[currentLang] : TEXT.nextLabel[currentLang];
+    }
+
+    function handleNext(){
+      const isLast = currentIndex===currentQuestions.length-1;
+      const answeredCount = Object.keys(userAnswers).length;
+      const allAnswered = answeredCount===currentQuestions.length;
+
+      if(isLast && allAnswered){ showResult(); }
+      else if(isLast && !allAnswered){
+        for(let i=0;i<currentQuestions.length;i++){
+          const id=currentQuestions[i].id;
+          if(userAnswers[id]===undefined){ currentIndex=i; renderQuestion(); break; }
+        }
+      }else{
+        currentIndex=Math.min(currentIndex+1,currentQuestions.length-1);
+        renderQuestion();
+      }
+    }
+
+    function handlePrev(){
+      currentIndex=Math.max(0,currentIndex-1);
+      renderQuestion();
+    }
+
+    function showResult(){
+      let correct=0;
+      currentQuestions.forEach(q=>{
+        if(userAnswers[q.id]===q.correctIndex) correct++;
+      });
+      const total=currentQuestions.length;
+      const percentage=Math.round((correct/total)*100);
+      $("resultScore").textContent = percentage;
+
+      const detail = currentLang==="id"
+        ? `Kamu menjawab ${correct} benar dari ${total} pertanyaan. Nilai kamu: ${percentage}.`
+        : `You answered ${correct} out of ${total} questions correctly. Your score: ${percentage}.`;
+      $("resultDetail").textContent = detail;
+
+      let badgeCls, badgeText;
+      if(percentage<50){
+        badgeCls="low";
+        badgeText=currentLang==="id"
+          ?"Rialo curious – masih banyak ruang eksplorasi."
+          :"Rialo curious – plenty of room to explore.";
+      }else if(percentage<80){
+        badgeCls="mid";
+        badgeText=currentLang==="id"
+          ?"Rialo aware – kamu nangkep idenya, tinggal digali lebih dalam."
+          :"Rialo aware you get the idea, now go deeper.";
+      }else{
+        badgeCls="good";
+        badgeText=currentLang==="id"
+          ?"Rialo-pilled – kamu ngerti meta-nya, bukan cuma slogannya."
+          :"Rialo-pilled – you see the meta, not just the slogans.";
+      }
+      const badge=$("resultBadge");
+      badge.textContent=badgeText;
+      badge.className="badge-soft "+badgeCls;
+
+      showScreen("result");
+    }
+
+    function resetToSetup(){
+      currentQuestions=[];
+      userAnswers={};
+      currentIndex=0;
+      showScreen("setup");
+      document.getElementById("quizArea").scrollIntoView({behavior:"smooth"});
+    }
+
+    function shareToTwitter(){
+      const score=$("resultScore").textContent;
+      const total=currentQuestions.length;
+      const textId=`Intinya score saya di Rialo Quiz: ${score}% (${total} pertanyaan). Coba score kamu: YOUR_WEBSITE_URL_HERE`;
+      const textEn=`My score on the Rialo Quiz: ${score}% (${total} questions). Try yours: YOUR_WEBSITE_URL_HERE`;
+      const text=currentLang==="id"?textId:textEn;
+      const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(text);
+      window.open(url,"_blank");
+    }
+
+    function toggleSound(){
+      const btn = $("soundToggleBtn");
+      const icon = $("soundIcon");
+      soundOn = !soundOn;
+      if(soundOn){
+        audioEl.play().catch(()=>{});
+        btn.classList.add("on");
+        icon.textContent = "🔊";
+      } else {
+        audioEl.pause();
+        btn.classList.remove("on");
+        icon.textContent = "🔈";
+      }
+    }
+
+    function init(){
+      renderCountButtons();
+      renderStaticText();
+
+      $("langIdBtn").addEventListener("click",()=>{
+        currentLang="id";
+        $("langIdBtn").classList.add("active");
+        $("langEnBtn").classList.remove("active");
+        renderStaticText();
+      });
+      $("langEnBtn").addEventListener("click",()=>{
+        currentLang="en";
+        $("langEnBtn").classList.add("active");
+        $("langIdBtn").classList.remove("active");
+        renderStaticText();
+      });
+
+      const start = () => goToQuizPage();
+
+      $("navStartBtn").addEventListener("click",start);
+      $("heroStartBtn").addEventListener("click",start);
+
+      $("startQuizBtn").addEventListener("click",startQuiz);
+      $("nextBtn").addEventListener("click",handleNext);
+      $("prevBtn").addEventListener("click",handlePrev);
+      $("retryBtn").addEventListener("click",resetToSetup);
+      $("shareBtn").addEventListener("click",shareToTwitter);
+      $("soundToggleBtn").addEventListener("click",toggleSound);
+    }
+
+    document.addEventListener("DOMContentLoaded",init);
+  </script>
+</body>
+</html>
