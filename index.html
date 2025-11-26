@@ -1072,8 +1072,8 @@
     function shareToTwitter(){
       const score=$("resultScore").textContent;
       const total=currentQuestions.length;
-      const textId=`Intinya score saya di Rialo Quiz: ${score}% (${total} pertanyaan). Coba score kamu: YOUR_WEBSITE_URL_HERE`;
-      const textEn=`My score on the Rialo Quiz: ${score}% (${total} questions). Try yours: YOUR_WEBSITE_URL_HERE`;
+      const textId=`Intinya score saya di Rialo Quiz: ${score}% (${total} pertanyaan). Coba score kamu: https://tiramitsueth.github.io/Rialo-Quiz/`;
+      const textEn=`My score on the Rialo Quiz: ${score}% (${total} questions). Try yours: https://tiramitsueth.github.io/Rialo-Quiz/`;
       const text=currentLang==="id"?textId:textEn;
       const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(text);
       window.open(url,"_blank");
@@ -1128,3 +1128,4 @@
   </script>
 </body>
 </html>
+
